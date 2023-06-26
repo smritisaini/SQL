@@ -1,0 +1,24 @@
+/*
+Covid 19 Data survey 
+using:-
+Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types
+*/
+
+Select *
+From covid_deaths
+Where continent is not null 
+order by 3,4
+
+
+-- Selecting Data 
+
+Select Location, total_cases, new_cases, total_deaths, population, date
+From Covid_Deaths
+Where continent is not null 
+order by 1,6
+
+
+--Total Cases vs Total Deaths
+select location, Population,total_cases,total_deaths  ,(round(((total_deaths/total_cases)*100) ,2) || '%')as deaths
+from covid_deaths where  location like '%India' 
+and total_cases is not null
