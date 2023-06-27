@@ -22,3 +22,41 @@ order by 1,6
 select location, Population,total_cases,total_deaths  ,(round(((total_deaths/total_cases)*100) ,2) || '%')as deaths
 from covid_deaths where  location like '%India' 
 and total_cases is not null
+
+
+
+-- Total Cases vs Population
+
+
+Select Location, date, Population, total_cases,  (total_cases/population)*100 as infectedpercent
+From Covid_Deaths
+order by 1,2
+
+
+-- infection rate vs population
+
+Select Location, Population, MAX(total_cases) as HighestInfectionCount,
+Max((total_cases/population))*100 as PercentPopulationInfected
+From covid_deaths
+Group by Location, Population
+order by PercentPopulationInfected desc
+
+-- Countries with Highest Death Count per Population
+
+select location, population, max(total_deaths), max((total_deaths/population)*100) as deathrate from covid_deaths
+group by location,population order by deathrate desc
+
+
+
+--total population vs vaccines
+
+Select deaths.continent, deaths.location, deaths.date, deaths.population, vacccines.new_vaccinations
+, SUM((vaccines.new_vaccinations)) OVER (Partition by deaths.Location Order by deaths.location, deaths.Date) as PeopleVaccinated
+From Covid_Deaths deaths
+inner Join Covid_Vaccines vaccines
+	On deaths.location = vaccines.location
+	and deaths.date = vaccines.date
+order by 2,3
+
+
+
